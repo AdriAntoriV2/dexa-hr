@@ -92,9 +92,6 @@ export function AttendancePage() {
     const [error, setError] = useState('');
 
     const loadAttendance = useCallback(async () => {
-        setLoading(true);
-        setError('');
-
         try {
             const result = await getAttendanceOverview({
                 from: from || undefined,
@@ -106,6 +103,7 @@ export function AttendancePage() {
             setRecords(result.data);
             setTotal(result.total);
             setTotalPages(result.totalPages);
+            setError('');
         } catch (err) {
             setError(
                 err instanceof Error
@@ -118,7 +116,11 @@ export function AttendancePage() {
     }, [from, to, page]);
 
     useEffect(() => {
-        void loadAttendance();
+        const timeoutId = window.setTimeout(() => {
+            void loadAttendance();
+        }, 0);
+
+        return () => window.clearTimeout(timeoutId);
     }, [loadAttendance]);
 
     const filteredRecords = useMemo(() => {

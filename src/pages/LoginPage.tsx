@@ -2,7 +2,7 @@ import { useState } from 'react';
 import type { FormEvent } from 'react';
 import { BriefcaseBusiness, LockKeyhole, Mail } from 'lucide-react';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../contexts/useAuth';
 import { Button } from '../components/ui/Button';
 
 export function LoginPage() {

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 interface EmployeeAvatarProps {
   fullName: string;
@@ -11,13 +11,10 @@ export function EmployeeAvatar({
   photoUrl,
   className = '',
 }: EmployeeAvatarProps) {
-  const [imageFailed, setImageFailed] = useState(false);
+  const [failedUrl, setFailedUrl] = useState<string | null>(null);
 
-  useEffect(() => {
-    setImageFailed(false);
-  }, [photoUrl]);
-
-  const showImage = Boolean(photoUrl?.trim()) && !imageFailed;
+  const normalizedUrl = photoUrl?.trim() || '';
+  const showImage = Boolean(normalizedUrl) && failedUrl !== normalizedUrl;
   const initial = fullName.trim().charAt(0).toUpperCase() || '?';
 
   if (!showImage) {
@@ -35,9 +32,9 @@ export function EmployeeAvatar({
   return (
     <img
       className={`employee-avatar ${className}`.trim()}
-      src={photoUrl!}
+      src={normalizedUrl}
       alt={`${fullName} avatar`}
-      onError={() => setImageFailed(true)}
+      onError={() => setFailedUrl(normalizedUrl)}
     />
   );
 }

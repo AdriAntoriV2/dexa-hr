@@ -134,13 +134,11 @@ export function DashboardPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const refresh = useCallback(async () => {
-    setIsLoading(true);
-    setError(null);
-
+  const loadDashboard = useCallback(async () => {
     try {
       const result = await loadDashboardData();
       setData(result);
+      setError(null);
     } catch (cause) {
       setError(
         cause instanceof Error
@@ -153,8 +151,18 @@ export function DashboardPage() {
   }, []);
 
   useEffect(() => {
-    void refresh();
-  }, [refresh]);
+    const timeoutId = window.setTimeout(() => {
+      void loadDashboard();
+    }, 0);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [loadDashboard]);
+
+  const refresh = useCallback(async () => {
+    setIsLoading(true);
+    setError(null);
+    await loadDashboard();
+  }, [loadDashboard]);
 
   const stats = [
     {

@@ -51,15 +51,15 @@ export function EmployeesPage() {
     const [isSaving, setIsSaving] = useState(false);
 
     const loadEmployees = useCallback(async () => {
-        setIsLoading(true);
-        setPageError('');
-
         try {
             const result = await getEmployees();
             setEmployees(result);
+            setPageError('');
         } catch (error) {
             setPageError(
-                error instanceof Error ? error.message : 'Unable to load employees.',
+                error instanceof Error
+                    ? error.message
+                    : 'Unable to load employees.',
             );
         } finally {
             setIsLoading(false);
@@ -67,7 +67,11 @@ export function EmployeesPage() {
     }, []);
 
     useEffect(() => {
-        void loadEmployees();
+        const timeoutId = window.setTimeout(() => {
+            void loadEmployees();
+        }, 0);
+
+        return () => window.clearTimeout(timeoutId);
     }, [loadEmployees]);
 
     const filteredEmployees = useMemo(() => {
