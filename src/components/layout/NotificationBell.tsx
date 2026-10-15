@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   Bell,
   CheckCheck,
@@ -34,11 +34,9 @@ function formatFieldName(field: string): string {
 }
 
 function getNotificationTitle(notification: HrNotification): string {
-  if (notification.type === 'EMPLOYEE_PASSWORD_CHANGED') {
-    return 'Employee password changed';
-  }
-
-  return 'Employee profile updated';
+  return notification.type === 'EMPLOYEE_PASSWORD_CHANGED'
+    ? 'Employee password changed'
+    : 'Employee profile updated';
 }
 
 function formatNotificationTime(value: string): string {
@@ -90,6 +88,9 @@ export function NotificationBell() {
   const [busyIds, setBusyIds] = useState<string[]>([]);
   const [isMarkingAll, setIsMarkingAll] = useState(false);
 
+  const centerRef = useRef<HTMLDivElement>(null);
+  const dismissedIdsRef = useRef<Set<string>>(new Set());
+
   const unreadCount = notifications.filter(
     (notification) => !notification.isRead,
   ).length;
@@ -97,13 +98,21 @@ export function NotificationBell() {
   const loadSavedNotifications = useCallback(async () => {
     try {
       const result = await getNotifications();
+      const dismissedIds = dismissedIdsRef.current;
 
-      const saved = result.data.map((notification) => ({
-        ...notification,
-        isRead: Boolean(notification.readAt),
-      }));
+      const saved = result.data
+        .filter((notification) => !dismissedIds.has(notification.id))
+        .map((notification) => ({
+          ...notification,
+          isRead: Boolean(notification.readAt),
+        }));
 
-      setNotifications((current) => mergeNotifications(current, saved));
+      setNotifications((current) =>
+        mergeNotifications(
+          current.filter((item) => !dismissedIds.has(item.id)),
+          saved,
+        ),
+      );
       setError(null);
     } catch (cause) {
       setError(
@@ -128,6 +137,7 @@ export function NotificationBell() {
           await connectNotificationStream(
             (notification) => {
               if (disposed) return;
+              if (dismissedIdsRef.current.has(notification.id)) return;
 
               const item: NotificationItem = {
                 ...notification,
@@ -178,6 +188,34 @@ export function NotificationBell() {
       if (retryTimer) clearTimeout(retryTimer);
     };
   }, [loadSavedNotifications]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handlePointerDown = (event: PointerEvent) => {
+      if (
+        centerRef.current &&
+        event.target instanceof Node &&
+        !centerRef.current.contains(event.target)
+      ) {
+        setIsOpen(false);
+      }
+    };
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener('pointerdown', handlePointerDown);
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('pointerdown', handlePointerDown);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isOpen]);
 
   const handleMarkRead = async (notification: NotificationItem) => {
     if (notification.isRead || busyIds.includes(notification.id)) return;
@@ -240,12 +278,16 @@ export function NotificationBell() {
   };
 
   const handleClear = () => {
-    // This clears only the current display, not the persisted database history.
+    for (const notification of notifications) {
+      dismissedIdsRef.current.add(notification.id);
+    }
+
     setNotifications([]);
+    setError(null);
   };
 
   return (
-    <div className="notification-center">
+    <div className="notification-center" ref={centerRef}>
       <button
         type="button"
         className="notification-bell-button"
@@ -363,10 +405,7 @@ export function NotificationBell() {
                     </div>
 
                     <div className="notification-item-content">
-                      <strong>
-                        {getNotificationTitle(notification)}
-                      </strong>
-
+                      <strong>{getNotificationTitle(notification)}</strong>
                       <p>{notification.message}</p>
 
                       {notification.changedFields.length > 0 && (

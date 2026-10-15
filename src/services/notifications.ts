@@ -46,8 +46,10 @@ function parseNotification(value: string): HrNotification | null {
 
     return {
       id: event.id,
-      type: 'EMPLOYEE_PROFILE_UPDATED',
-      employeeId: event.employeeId,
+      type:
+        event.type === 'EMPLOYEE_PASSWORD_CHANGED'
+          ? 'EMPLOYEE_PASSWORD_CHANGED'
+          : 'EMPLOYEE_PROFILE_UPDATED', employeeId: event.employeeId,
       changedFields: event.changedFields,
       message: event.message,
       occurredAt: event.occurredAt,
@@ -106,7 +108,11 @@ export async function connectNotificationStream(
   const dispatchEvent = () => {
     const data = dataLines.join('\n');
 
-    if (eventType === 'EMPLOYEE_PROFILE_UPDATED' && data) {
+    if (
+      (eventType === 'EMPLOYEE_PROFILE_UPDATED' ||
+        eventType === 'EMPLOYEE_PASSWORD_CHANGED') &&
+      data
+    ) {
       const notification = parseNotification(data);
       if (notification) onNotification(notification);
     }
@@ -150,7 +156,7 @@ export async function connectNotificationStream(
       }
     }
   } finally {
-    await reader.cancel().catch(() => {});
+    await reader.cancel().catch(() => { });
     reader.releaseLock();
   }
 }
