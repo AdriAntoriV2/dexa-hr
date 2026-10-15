@@ -1,75 +1,118 @@
-# React + TypeScript + Vite
+# Dexa HR
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+The HR-facing web application for the Dexa employee management and attendance system. It provides a centralized interface for HR users to access employee information, review attendance, and view dashboard statistics.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **HR dashboard** — view workforce and attendance statistics.
+- **Employee management** — browse and access employee information.
+- **Attendance management** — review employee attendance records.
+- **Authentication** — login and protected routes for authenticated access.
+- **Notifications** — access notifications through the notification interface.
+- **Reusable UI components** — shared components for cards, buttons, employee avatars, statistics, and page headers.
+- **Automated tests** — Vitest and React Testing Library for component and application testing.
 
-## React Compiler
+## Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- React 19
+- TypeScript
+- Vite
+- React Router 7
+- Lucide React
+- Vitest
+- React Testing Library
+- jsdom
+- ESLint
 
-## Expanding the ESLint configuration
+## Prerequisites
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- Node.js and npm
+- A running Dexa backend API
+- An HR account with the appropriate permissions
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Getting Started
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### 1. Install dependencies
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```text
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
+### 2. Configure environment variables
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Create a `.env.local` file in the project root:
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```dotenv
+VITE_API_URL=http://localhost:3000
 ```
+
+`VITE_API_URL` specifies the base URL of the Dexa backend API. If it is not set, the application defaults to `http://localhost:3000`.
+
+Change the value to match your backend deployment.
+
+**Security note:** Vite exposes variables prefixed with `VITE_` to client-side code. Do not store passwords, private API keys, or other confidential secrets in these variables.
+
+
+### 3. Start the development server
+
+```text
+npm run dev
+```
+
+Open the local URL displayed in the terminal.
+
+## Available Scripts
+
+| Command | Description |
+|---|---|
+| `npm run dev` | Start the Vite development server |
+| `npm run build` | Type-check and build the production application |
+| `npm run preview` | Preview the production build locally |
+| `npm run lint` | Run ESLint |
+| `npm run test` | Run the test suite once |
+| `npm run test:watch` | Run tests in watch mode |
+
+## Testing
+
+Run the test suite:
+
+```text
+npm run test
+```
+
+Run linting and the production build:
+
+```text
+npm run lint
+npm run build
+```
+
+## Project Structure
+
+```text
+src/
+├── assets/         # Static assets
+├── components/
+│   ├── layout/     # App layout, sidebar, protected routes, notifications
+│   └── ui/         # Reusable interface components
+├── contexts/       # Authentication context
+├── pages/          # Dashboard, employees, attendance, login, 404
+├── services/       # API, employee, attendance, notification services
+├── styles/         # Page and layout stylesheets
+├── test/           # Test setup
+├── types/          # TypeScript data types
+├── App.tsx         # Application routes and composition
+└── main.tsx        # Application entry point
+```
+
+## Related Repositories
+
+- [Dexa Employees](https://github.com/AdriAntoriV2/dexa-employees) — employee-facing portal
+- [Dexa Audit](https://github.com/AdriAntoriV2/dexa-audit) — audit event processing
+- [Dexa Backend](https://github.com/AdriAntoriV2/dexa-backend) — backend API
+
+## Development Notes
+
+- The backend API must be available and correctly configured for application features that depend on it.
+- Access to HR functionality should be controlled by the application's authentication and authorization logic.
+- Run the test suite, lint checks, and production build before submitting changes.
