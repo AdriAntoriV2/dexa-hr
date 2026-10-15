@@ -1,0 +1,211 @@
+.notification-center {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.notification-bell-button {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  color: var(--color-muted);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 9px;
+}
+
+.notification-bell-button:hover {
+  color: var(--color-text);
+  background: var(--color-panel);
+  border-color: var(--color-border);
+}
+
+.notification-unread-count {
+  position: absolute;
+  top: 1px;
+  right: 0;
+  display: grid;
+  place-items: center;
+  min-width: 17px;
+  height: 17px;
+  padding: 0 4px;
+  color: white;
+  background: #ef4444;
+  border: 2px solid var(--color-bg);
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.notification-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  cursor: default;
+}
+
+.notification-panel {
+  position: absolute;
+  z-index: 41;
+  top: calc(100% + 10px);
+  right: -8px;
+  display: flex;
+  flex-direction: column;
+  width: min(390px, calc(100vw - 24px));
+  max-height: min(520px, calc(100vh - 100px));
+  overflow: hidden;
+  background: var(--color-panel);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  box-shadow: 0 16px 44px rgb(0 0 0 / 35%);
+}
+
+.notification-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 17px 18px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.notification-panel-header h2 {
+  margin: 0;
+  color: var(--color-text);
+  font-size: 15px;
+  font-weight: 650;
+}
+
+.notification-panel-header p {
+  margin: 5px 0 0;
+  color: var(--color-muted);
+  font-size: 12px;
+}
+
+.notification-panel-actions {
+  display: flex;
+  gap: 5px;
+}
+
+.notification-panel-actions button {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  color: var(--color-muted);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 7px;
+}
+
+.notification-panel-actions button:hover:not(:disabled) {
+  color: var(--color-text);
+  background: var(--color-bg);
+  border-color: var(--color-border);
+}
+
+.notification-panel-actions button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.notification-connection {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 10px 18px;
+  color: var(--color-muted);
+  font-size: 11px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.notification-list {
+  overflow-y: auto;
+}
+
+.notification-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 40px 24px;
+  color: var(--color-muted);
+  text-align: center;
+}
+
+.notification-empty strong {
+  color: var(--color-text);
+  font-size: 13px;
+}
+
+.notification-empty span {
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.notification-item {
+  display: grid;
+  grid-template-columns: 12px minmax(0, 1fr);
+  gap: 10px;
+  padding: 15px 18px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.notification-item:last-child {
+  border-bottom: 0;
+}
+
+.notification-item.is-unread {
+  background: rgb(129 140 248 / 5%);
+}
+
+.notification-item-indicator {
+  padding-top: 5px;
+  color: var(--color-accent);
+}
+
+.notification-item-content {
+  min-width: 0;
+}
+
+.notification-item-content > strong {
+  display: block;
+  color: var(--color-text);
+  font-size: 12px;
+  font-weight: 650;
+}
+
+.notification-item-content > p {
+  margin: 6px 0 0;
+  color: var(--color-muted);
+  font-size: 12px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.notification-item-content .notification-changed-fields {
+  color: var(--color-text);
+  font-size: 11px;
+}
+
+.notification-item-content time {
+  display: block;
+  margin-top: 9px;
+  color: var(--color-muted);
+  font-size: 10px;
+}
+
+@media (max-width: 480px) {
+  .notification-panel {
+    position: fixed;
+    top: 70px;
+    right: 12px;
+    max-height: calc(100vh - 90px);
+  }
+}
