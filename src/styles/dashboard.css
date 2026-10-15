@@ -1,0 +1,182 @@
+.dashboard-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.dashboard-refresh-button,
+.dashboard-view-all {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 8px 11px;
+  color: var(--color-text);
+  background: var(--color-panel);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  font: inherit;
+  font-size: 12px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.dashboard-refresh-button:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.dashboard-error {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding: 12px 14px;
+  color: var(--color-text);
+  background: var(--color-panel);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  font-size: 13px;
+}
+
+.dashboard-error button {
+  color: var(--color-accent);
+  background: transparent;
+  border: 0;
+  font: inherit;
+  cursor: pointer;
+}
+
+.dashboard-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.dashboard-attendance-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 12px;
+}
+
+.dashboard-attendance-table th,
+.dashboard-attendance-table td {
+  padding: 13px 12px;
+  border-bottom: 1px solid var(--color-border);
+  white-space: nowrap;
+}
+
+.dashboard-attendance-table th {
+  color: var(--color-muted);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.dashboard-attendance-table td {
+  color: var(--color-text);
+}
+
+.dashboard-attendance-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.dashboard-attendance-table td:first-child {
+  min-width: 180px;
+}
+
+.dashboard-attendance-table td:first-child strong,
+.dashboard-attendance-table td:first-child span {
+  display: block;
+}
+
+.dashboard-attendance-table td:first-child span {
+  margin-top: 4px;
+  color: var(--color-muted);
+  font-size: 11px;
+}
+
+.dashboard-table-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 32px 16px;
+  color: var(--color-muted);
+  text-align: center;
+  font-size: 12px;
+}
+
+.dashboard-table-empty strong {
+  color: var(--color-text);
+  font-size: 13px;
+}
+
+.dashboard-table-empty span {
+  line-height: 1.5;
+}
+
+.status-badge.is-error {
+  color: #ef4444;
+}
+
+.is-spinning {
+  animation: dashboard-spin 1s linear infinite;
+}
+
+@keyframes dashboard-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-toolbar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .dashboard-refresh-button {
+    align-self: flex-end;
+  }
+
+  .dashboard-attendance-table th,
+  .dashboard-attendance-table td {
+    padding: 11px 9px;
+  }
+}
+
+/* Align the Welcome and System Status cards on desktop */
+.dashboard-grid {
+  align-items: stretch;
+}
+
+.dashboard-grid > * {
+  min-width: 0;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+/* Give both dashboard cards consistent internal spacing */
+.dashboard-grid > * > * {
+  box-sizing: border-box;
+}
+
+/* Keep the two cards aligned and padded on smaller screens */
+@media (max-width: 768px) {
+  .dashboard-grid {
+    align-items: stretch;
+  }
+
+  .dashboard-grid > * {
+    height: auto;
+    min-width: 0;
+    padding: 1.25rem;
+  }
+}
+
+.dashboard-grid {
+  margin-bottom: 1.5rem;
+}

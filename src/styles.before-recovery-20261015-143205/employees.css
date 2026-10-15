@@ -1,0 +1,35 @@
+.not-found-page {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  text-align: center;
+}
+
+.not-found-code {
+  color: #a5b4fc;
+  font-size: clamp(64px, 12vw, 100px);
+  font-weight: 800;
+  letter-spacing: -5px;
+}
+
+.not-found-page h1 {
+  margin: 8px 0;
+  font-size: 26px;
+}
+
+.not-found-page p {
+  margin: 0 0 24px;
+  color: var(--color-muted);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.auth-loading {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  color: var(--color-muted);
+}
