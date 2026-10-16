@@ -15,6 +15,7 @@ import type {
     AttendanceRecord,
     AttendanceTimingStatus,
 } from '../types/attendance';
+import { EmployeeAvatar } from '../components/ui/EmployeeAvatar'
 
 const PAGE_SIZE = 10;
 
@@ -282,9 +283,11 @@ export function AttendancePage() {
                                     <tr key={record.id}>
                                         <td>
                                             <div className="attendance-employee">
-                                                <div className="attendance-employee-avatar">
-                                                    {record.employee.fullName.trim().charAt(0).toUpperCase() || '?'}
-                                                </div>
+                                                <EmployeeAvatar
+                                                    fullName={record.employee.fullName}
+                                                    photoUrl={record.employee.photoUrl}
+                                                    className="attendance-employee-avatar"
+                                                />
                                                 <div>
                                                     <strong>{record.employee.fullName}</strong>
                                                     <span>{record.employee.companyEmail}</span>
@@ -293,9 +296,13 @@ export function AttendancePage() {
                                         </td>
                                         <td>{formatDate(record.attendanceDate)}</td>
                                         <td>{formatTime(record.checkInAt)}</td>
-                                        <td><StatusBadge status={record.checkInStatus} /></td>
+                                        <td>
+                                            <StatusBadge status={record.checkInStatus} />
+                                        </td>
                                         <td>{formatTime(record.checkOutAt)}</td>
-                                        <td><StatusBadge status={record.checkOutStatus} /></td>
+                                        <td>
+                                            <StatusBadge status={record.checkOutStatus} />
+                                        </td>
                                     </tr>
                                 ))
                             )}
